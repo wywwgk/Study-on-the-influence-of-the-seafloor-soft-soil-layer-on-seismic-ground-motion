@@ -1,0 +1,1154 @@
+1. The form of SV wave input
+(1) Model 1: land site under Kobe wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 50 40 30 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50
+zone group '4' range position-z 50 60
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import ' 0.256kobe.txt'                                   //Kobe wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-x  0.586 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-x position (5,5,0)
+zone history name='30m2' acceleration-x position (5,5,9.9)
+zone history name='30m3' acceleration-x position (5,5,19.9)
+zone history name='30m4' acceleration-x position (5,5,59.9)
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+(2) Model 1: land site under El Centro wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 50 40 30 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50
+zone group '4' range position-z 50 60
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import '0.285gei.txt                                  //El centro wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-x  0.35 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-x position (5,5,9.9)
+zone history name='30m2' acceleration-x position (5,5,19.9)
+zone history name='30m3' acceleration-x position (5,5,39.9)
+zone history name='30m4' acceleration-x position (5,5,49.9)
+zone history name='30m5' acceleration-x position (5,5,59.9)  
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+
+
+(3) Model 2: land site with first soft soil layer under Kobe wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 50 40 30 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50
+zone group '4' range position-z 50 60 
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10     //the model is established, the parameters and gravity are set up
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import ' 0.256kobe.txt'                                  //Kobe wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-x  0.586 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-x position (5,5,9.9)
+zone history name='30m2' acceleration-x position (5,5,19.9)
+zone history name='30m3' acceleration-x position (5,5,39.9)
+zone history name='30m4' acceleration-x position (5,5,49.9)
+zone history name='30m5' acceleration-x position (5,5,59.9)   
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+(4) Model 2: land site with first soft soil layer under El Centro wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 50 40 30 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50
+zone group '4' range position-z 50 60
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import '0.285gei.txt'                          
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-x  0.35 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-x position (5,5,9.9)
+zone history name='30m2' acceleration-x position (5,5,19.9)
+zone history name='30m3' acceleration-x position (5,5,39.9)
+zone history name='30m4' acceleration-x position (5,5,49.9)
+zone history name='30m5' acceleration-x position (5,5,59.9)  
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+
+(5) Model 3: marine site under Kobe wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 50 40 30 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 60            // Division of soil layer (no soft soil layer) 
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+
+model restore 'part1'
+zone gridpoint initialize displacement (0,0,0)
+zone face apply velocity (0,0,0) range group 'North' or 'South' or 'Bottom' or 'East' or 'West'
+zone face apply stress-normal -3e5 range group 'Top'
+zone initialize-stresses
+model solve ratio-local 1e-4
+model save '30m'
+
+model restore '30m'
+model config fluid
+zone fluid cmodel assign isotropic
+model fluid on 
+model mech  off
+zone gridpoint initialize fluid-modulus 1000.0
+zone gridpoint initialize saturation 1.0
+zone gridpoint initialize fluid-tension 0
+zone fluid property porosity 0.3 permeability 1e-8
+zone initialize fluid-density 1000
+zone face apply pore-pressure=3e5 range group 'Top' 
+model fluid off  
+model mechanical on
+zone gridpoint initialize fluid-modulus 0.0
+model solve 
+model save 'dam30m'
+
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import ' 0.256kobe.txt'                                   //Kobe wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-x  0.586 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-x position (5,5,9.9)
+zone history name='30m2' acceleration-x position (5,5,19.9)
+zone history name='30m3' acceleration-x position (5,5,39.9)
+zone history name='30m4' acceleration-x position (5,5,49.9)
+zone history name='30m5' acceleration-x position (5,5,59.9)  
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+
+(6) Model 3: marine site under El Centro wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 50 40 30 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 60
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+
+model restore 'part1'
+zone gridpoint initialize displacement (0,0,0)
+zone face apply velocity (0,0,0) range group 'North' or 'South' or 'Bottom' or 'East' or 'West'
+zone face apply stress-normal -3e5 range group 'Top'
+zone initialize-stresses
+model solve ratio-local 1e-4
+model save '30m'
+
+model restore '30m'
+model config fluid
+zone fluid cmodel assign isotropic
+model fluid on 
+model mech  off
+zone gridpoint initialize fluid-modulus 1000.0
+zone gridpoint initialize saturation 1.0
+zone gridpoint initialize fluid-tension 0
+zone fluid property porosity 0.3 permeability 1e-8
+zone initialize fluid-density 1000
+zone face apply pore-pressure=3e5 range group 'Top' 
+model fluid off  
+model mechanical on
+zone gridpoint initialize fluid-modulus 0.0
+model solve 
+model save 'dam30m'
+
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import '0.285gei.txt                                   //EI cento wave input
+
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-x  0.35 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-x position (5,5,9.9)
+zone history name='30m2' acceleration-x position (5,5,19.9)
+zone history name='30m3' acceleration-x position (5,5,39.9)
+zone history name='30m4' acceleration-x position (5,5,49.9)
+zone history name='30m5' acceleration-x position (5,5,59.9)   
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+(7) Model 4: marine site with first soft soil layer under Kobe wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 50 40 30 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50  
+zone group '4' range position-z 50 60                      //the model is established 
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'           //Soil layer parameters are defined
+zone face skin break-angle 25 
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10                                             //Loading gravity
+model largestrain on 
+model solve ratio-local 1e-4
+model save 'part1'
+
+model restore 'part1'
+zone gridpoint initialize displacement (0,0,0)
+zone face apply velocity (0,0,0) range group 'North' or 'South' or 'Bottom' or 'East' or 'West'
+zone face apply stress-normal -3e5 range group 'Top' 
+     //The soil skeleton is loaded by weight pressure of water
+zone initialize-stresses
+model solve ratio-local 1e-4
+model save '30m'
+
+model restore '30m'
+model config fluid
+zone fluid cmodel assign isotropic
+model fluid on 
+model mech  off
+zone gridpoint initialize fluid-modulus 1000.0
+zone gridpoint initialize saturation 1.0
+zone gridpoint initialize fluid-tension 0
+zone fluid property porosity 0.3 permeability 1e-8 
+zone initialize fluid-density 1000                                        
+zone face apply pore-pressure=3e5 range group 'Top' 
+model fluid off   
+                   //Void parameter, density of water, and pore water pressure are set up
+model mechanical on
+zone gridpoint initialize fluid-modulus 0.0
+model solve 
+model save 'dam30m'
+
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import ' 0.256kobe.txt'                                   //Kobe wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-x  0.586 table 'acc' range position-z=0    
+// X direction input wave
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-x position (5,5,9.9)
+zone history name='30m2' acceleration-x position (5,5,19.9)
+zone history name='30m3' acceleration-x position (5,5,39.9)
+zone history name='30m4' acceleration-x position (5,5,49.9)
+zone history name='30m5' acceleration-x position (5,5,59.9) 
+                                    //X direction acceleration of monitoring point
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness       
+      //Free boundary and Rayleigh damping are set up
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+(8) Model 4: marine site with first soft soil layer under El Centro wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 50 40 30 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50
+zone group '4' range position-z 50 60
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+
+model restore 'part1'
+zone gridpoint initialize displacement (0,0,0)
+zone face apply velocity (0,0,0) range group 'North' or 'South' or 'Bottom' or 'East' or 'West'
+zone face apply stress-normal -3e5 range group 'Top'
+zone initialize-stresses
+model solve ratio-local 1e-4
+model save '30m'
+
+model restore '30m'
+model config fluid
+zone fluid cmodel assign isotropic
+model fluid on 
+model mech  off
+zone gridpoint initialize fluid-modulus 1000.0
+zone gridpoint initialize saturation 1.0
+zone gridpoint initialize fluid-tension 0
+zone fluid property porosity 0.3 permeability 1e-8
+zone initialize fluid-density 1000
+zone face apply pore-pressure=3e5 range group 'Top' 
+model fluid off  
+model mechanical on
+zone gridpoint initialize fluid-modulus 0.0
+model solve 
+model save 'dam30m'
+
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import '0.285gei.txt'                                  //El centro wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-x  0.35 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-x position (5,5,9.9)
+zone history name='30m2' acceleration-x position (5,5,19.9)
+zone history name='30m3' acceleration-x position (5,5,39.9)
+zone history name='30m4' acceleration-x position (5,5,49.9)
+zone history name='30m5' acceleration-x position (5,5,59.9)  
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2. The form of P wave input
+
+(1) Model 1: land site under Kobe wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 20 16 12 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50
+zone group '4' range position-z 50 60
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import ' 0.256kobe.txt'                                   //Kobe wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-z  0.586 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-z position (5,5,9.9)
+zone history name='30m2' acceleration-z position (5,5,19.9)
+zone history name='30m3' acceleration-z position (5,5,39.9)
+zone history name='30m4' acceleration-z position (5,5,49.9)
+zone history name='30m5' acceleration-z position (5,5,59.9)   
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+(2) Model 1: land site under El Centro wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 20 16 12 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50
+zone group '4' range position-z 50 60
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import '0.285gei.txt                               //El Centro wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-z  0.35 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-z position (5,5,9.9)
+zone history name='30m2' acceleration-z position (5,5,19.9)
+zone history name='30m3' acceleration-z position (5,5,39.9)
+zone history name='30m4' acceleration-z position (5,5,49.9)
+zone history name='30m5' acceleration-z position (5,5,59.9)   
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+(3) Model 2: land site with first soft soil layer under Kobe wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 20 16 12 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50
+zone group '4' range position-z 50 60 
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10     //the model is established, the parameters and gravity are set up
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import ' 0.256kobe.txt'                                   //Kobe wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-z  0.586 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-z position (5,5,9.9)
+zone history name='30m2' acceleration-z position (5,5,19.9)
+zone history name='30m3' acceleration-z position (5,5,39.9)
+zone history name='30m4' acceleration-z position (5,5,49.9)
+zone history name='30m5' acceleration-z position (5,5,59.9)   
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+(4) Model 2: land site with first soft soil layer under El Centro wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 20 16 12 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50
+zone group '4' range position-z 50 60
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import '0.285gei.txt'                          
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-z  0.35 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-z position (5,5,9.9)
+zone history name='30m2' acceleration-z position (5,5,19.9)
+zone history name='30m3' acceleration-z position (5,5,39.9)
+zone history name='30m4' acceleration-z position (5,5,49.9)
+zone history name='30m5' acceleration-z position (5,5,59.9)   
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+(5) Model 3: marine site under Kobe wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 20 16 12 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 60            // Division of soil layer (no soft soil layer)
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+
+model restore 'part1'
+zone gridpoint initialize displacement (0,0,0)
+zone face apply velocity (0,0,0) range group 'North' or 'South' or 'Bottom' or 'East' or 'West'
+zone face apply stress-normal -3e5 range group 'Top'
+zone initialize-stresses
+model solve ratio-local 1e-4
+model save '30m'
+
+model restore '30m'
+model config fluid
+zone fluid cmodel assign isotropic
+model fluid on 
+model mech  off
+zone gridpoint initialize fluid-modulus 1000.0
+zone gridpoint initialize saturation 1.0
+zone gridpoint initialize fluid-tension 0
+zone fluid property porosity 0.3 permeability 1e-8
+zone initialize fluid-density 1000
+zone face apply pore-pressure=3e5 range group 'Top' 
+model fluid off  
+model mechanical on
+zone gridpoint initialize fluid-modulus 0.0
+model solve 
+model save 'dam30m'
+
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import ' 0.256kobe.txt'                  //Kobe wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-z  0.586 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-z position (5,5,9.9)
+zone history name='30m2' acceleration-z position (5,5,19.9)
+zone history name='30m3' acceleration-z position (5,5,39.9)
+zone history name='30m4' acceleration-z position (5,5,49.9)
+zone history name='30m5' acceleration-z position (5,5,59.9)   
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+
+(6) Model 3: marine site under El Centro wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 20 16 12 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 60
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+
+model restore 'part1'
+zone gridpoint initialize displacement (0,0,0)
+zone face apply velocity (0,0,0) range group 'North' or 'South' or 'Bottom' or 'East' or 'West'
+zone face apply stress-normal -3e5 range group 'Top'
+zone initialize-stresses
+model solve ratio-local 1e-4
+model save '30m'
+
+model restore '30m'
+model config fluid
+zone fluid cmodel assign isotropic
+model fluid on 
+model mech  off
+zone gridpoint initialize fluid-modulus 1000.0
+zone gridpoint initialize saturation 1.0
+zone gridpoint initialize fluid-tension 0
+zone fluid property porosity 0.3 permeability 1e-8
+zone initialize fluid-density 1000
+zone face apply pore-pressure=3e5 range group 'Top' 
+model fluid off  
+model mechanical on
+zone gridpoint initialize fluid-modulus 0.0
+model solve 
+model save 'dam30m'
+
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import '0.285gei.txt                                   //EI cento wave input
+
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-z  0.35 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-z position (5,5,9.9)
+zone history name='30m2' acceleration-z position (5,5,19.9)
+zone history name='30m3' acceleration-z position (5,5,39.9)
+zone history name='30m4' acceleration-z position (5,5,49.9)
+zone history name='30m5' acceleration-z position (5,5,59.9)   
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+(7) Model 4: marine site with first soft soil layer under Kobe wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 20 16 12 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50  
+zone group '4' range position-z 50 60                       //the model is established
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'            //Soil layer parameters are defined
+zone face skin break-angle 25 
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10                                             //Loading gravity
+model largestrain on 
+model solve ratio-local 1e-4
+model save 'part1'
+
+model restore 'part1'
+zone gridpoint initialize displacement (0,0,0)
+zone face apply velocity (0,0,0) range group 'North' or 'South' or 'Bottom' or 'East' or 'West'
+zone face apply stress-normal -3e5 range group 'Top' 
+                          //The soil skeleton is loaded by weight pressure of water
+zone initialize-stresses
+model solve ratio-local 1e-4
+model save '30m'
+
+model restore '30m'
+model config fluid
+zone fluid cmodel assign isotropic
+model fluid on 
+model mech  off
+zone gridpoint initialize fluid-modulus 1000.0
+zone gridpoint initialize saturation 1.0
+zone gridpoint initialize fluid-tension 0
+zone fluid property porosity 0.3 permeability 1e-8 
+zone initialize fluid-density 1000                                        
+zone face apply pore-pressure=3e5 range group 'Top' 
+model fluid off 
+                   //Void parameter, density of water, and pore water pressure are set up
+model mechanical on
+zone gridpoint initialize fluid-modulus 0.0
+model solve 
+model save 'dam30m'
+
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import ' 0.256kobe.txt'                                 //Kobe wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-z  0.586 table 'acc' range position-z=0
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-z position (5,5,9.9)
+zone history name='30m2' acceleration-z position (5,5,19.9)
+zone history name='30m3' acceleration-z position (5,5,39.9)
+zone history name='30m4' acceleration-z position (5,5,49.9)
+zone history name='30m5' acceleration-z position (5,5,59.9) 
+                               // Acceleration of monitoring point 
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness   
+   //Free boundary and Rayleigh damping are set up
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
+
+(8) Model 4: marine site with first soft soil layer under El Centro wave input
+model new
+model config dynamic
+model dynamic active off
+zone create brick size 20 16 12 point 0 0 0 0 point 1 100 0 0 point 2 0 80 0 point 3 0 0 60
+zone gridpoint initialize velocity (0,0,0)
+zone gridpoint initialize displacement (0,0,0)
+zone group '1' range position-z 0 20
+zone group '2' range position-z 20 40
+zone group '3' range position-z 40 50
+zone group '4' range position-z 50 60
+zone cmodel assign mohr-coulomb       
+zone property shear 951e6 bulk 92e8 cohesion=1e10 range group '1'
+zone property tension 1e10  range group '1'                   
+zone initialize density 2250 range group '1'
+zone property shear 272e6 bulk 64e8 cohesion=1e10 range group '2'
+zone property tension 1e10  range group '2'                    
+zone initialize density 2000 range group '2'
+zone property shear 97e6 bulk 94e8 cohesion=1e10 range group '3'
+zone property tension 1e10 range group '3'                    
+zone initialize density 1700 range group '3'
+zone property shear 49e6 bulk 35.4e8 cohesion=1e10 range group '4'
+zone property tension 1e10 range group '4'                    
+zone initialize density 1500 range group '4'
+zone face skin break-angle 25
+zone gridpoint fix velocity-x  range position-x 0
+zone gridpoint fix velocity-x  range position-x 10
+zone gridpoint fix velocity-z  range position-z 0
+zone gridpoint fix velocity-z  range position-z 60
+zone gridpoint fix velocity-y  range position-y 0
+zone gridpoint fix velocity-y  range position-y 10
+model gravity 0 0 -10
+model largestrain on
+model solve ratio-local 1e-4
+model save 'part1'
+
+model restore 'part1'
+zone gridpoint initialize displacement (0,0,0)
+zone face apply velocity (0,0,0) range group 'North' or 'South' or 'Bottom' or 'East' or 'West'
+zone face apply stress-normal -3e5 range group 'Top'
+zone initialize-stresses
+model solve ratio-local 1e-4
+model save '30m'
+
+model restore '30m'
+model config fluid
+zone fluid cmodel assign isotropic
+model fluid on 
+model mech  off
+zone gridpoint initialize fluid-modulus 1000.0
+zone gridpoint initialize saturation 1.0
+zone gridpoint initialize fluid-tension 0
+zone fluid property porosity 0.3 permeability 1e-8
+zone initialize fluid-density 1000
+zone face apply pore-pressure=3e5 range group 'Top' 
+model fluid off  
+model mechanical on
+zone gridpoint initialize fluid-modulus 0.0
+model solve 
+model save 'dam30m'
+
+model restore 'part1'
+model dynamic active=on 
+model largestrain off
+zone gridpoint initialize displacement (0,0,0)
+zone gridpoint initialize velocity (0,0,0)
+table 'acc' import '0.285gei.txt'                               //El centro wave input
+history interval 100
+model dynamic timestep  fix 1.3e-5
+zone face apply acceleration-z  0.35 table 'acc' range position-z=0 
+    // Z direction input wave
+model history name='time1' dynamic time-total
+zone history name='30m1' acceleration-z position (5,5,9.9)
+             //Setting the monitoring point in the Z direction
+zone history name='30m2' acceleration-z position (5,5,19.9)
+zone history name='30m3' acceleration-z position (5,5,39.9)
+zone history name='30m4' acceleration-z position (5,5,49.9)
+zone history name='30m5' acceleration-z position (5,5,59.9)   
+zone dynamic free-field on
+zone dynamic damping rayleigh 0.05 2.0 stiffness
+zone dynamic multi-step on
+model solve time-total 20
+model save '0.2g30input'
+
